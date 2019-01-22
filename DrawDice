@@ -1,0 +1,42 @@
+float curRoll;
+//Horizontal and Vertical align of text box.
+float h;//no touch
+float v;// no touch
+//Width and Height of text box
+float wi = 200;
+float he = 80;
+
+//is equal to dice output
+String display;
+
+
+void setup(){
+  background(255,255,255);
+  size(400,400);
+  h = ((width/2) - (wi/2));
+  v = ((height/2) - (he/2));
+  roll();
+}
+
+void draw(){
+  //Draw Text Box
+  fill(0);
+  textAlign(CENTER, CENTER);
+  text(display, h, v, 200, 80);
+}
+
+void mouseReleased(){
+  roll();
+}
+
+void roll(){
+  //Random roll and turn into string
+  curRoll = random(6);
+  display = str(curRoll);
+  
+  //dont look at this, I'm sorry I failed you Joe.
+  //this draws a new "canvas"
+  fill(255,255,255);
+  rect(0,0, width, height);
+  text(display, h, v, 200, 80);
+}
