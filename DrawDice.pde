@@ -1,13 +1,23 @@
-float curRoll;
-//Horizontal and Vertical align of text box.
-float h;//no touch
-float v;// no touch
-//Width and Height of text box
-float wi = 200;
-float he = 40;
+//Whole number dice equipped with a debug window for testing alignment and the capabillity to adjust how many dice there are (these dice outputs will automatically format themselves) and change the range of these
 
-//is equal to dice output
+
+
+//Horizontal and Vertical align of text box.
+float h;//no touch, horizontal
+float v;// no touch, vertical
+
+//Width and Height of text box
+float wi = 200;//width
+float he = 40;//height
+
+//Used to display the dice output
 String display;
+
+//debug string
+String debug;
+
+//Number of dice
+int[] dice = new int[6];
 
 
 void setup(){
@@ -21,21 +31,12 @@ void setup(){
   h = ((width/2) - (wi/2));
   
   //Vertical position of the output window (y)
-  v = ((height/2) - (he/2));
+  v = ((height/2) - (he*(dice.length/2)) - (he/2));
   
   //Roll (Debug. Remove this) 
   roll();
-}
-
-void draw(){
-  //Draw Text Box
-  fill(0);
-  textAlign(CENTER, CENTER);
-  //Output box
-  text(display, h, v, wi, he);
   
-  //Input box
-  text(display, h, (v+he), wi, he);
+  debug = ("Height: " + str(he) + ", " + "Width: " + str(wi) + ", " + "Horizontal " + str(h) + ", " + "Vertical" + str(v) + ".");
 }
 
 void mouseReleased(){
@@ -43,14 +44,19 @@ void mouseReleased(){
 }
 
 void roll(){
-  //Random roll and turn into string
-  curRoll = random(6);
-  curRoll = round(curRoll);
-  display = str(curRoll);
-  
-  //Don't look at this, I'm sorry I failed you Joe.
-  //this draws a new "canvas"
-  fill(255,255,255);
-  rect(0,0, width, height);
-  text(display, h, v, 200, 80);
+  background(255);
+  for(int i = 0; i < dice.length; i++){
+    float curRoll = round(random(0,6));
+    display = str(curRoll);
+    //Draw Text Box
+    fill(0);
+    textAlign(CENTER, CENTER);
+    //Output box
+    text(display, h, ((i*he)+v), wi, he);
+  }
+}
+
+void draw(){
+  textAlign(LEFT, CENTER);
+    text(debug, 0, 0, wi, he);
 }
