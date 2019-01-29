@@ -81,6 +81,4 @@ void greeter(String greeting){
 }
 
 void draw(){
-  /*textAlign(LEFT, CENTER);
-    text(debug, 0, 0, wi, he);*/
 }
