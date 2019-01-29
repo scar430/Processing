@@ -1,5 +1,12 @@
 //Whole number dice equipped with a debug window for testing alignment and the capabillity to adjust how many dice there are (these dice outputs will automatically format themselves) and change the range of these outputs
 
+/*Assignments:
+Making size variable : this in the roll(float, float) function, the first variable is how many dice there are and the second is what is the maximum range (size).
+Rolling Multiple Dice :  this is stated above.
+Rerolling on mouse click : this is in mouseReleased() and it triggers roll() and debug()
+*/
+
+
 //Horizontal and Vertical align of text box.
 float h;//no touch, horizontal
 float v;// no touch, vertical
