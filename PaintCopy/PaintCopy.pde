@@ -160,6 +160,18 @@ void mouseReleased(){
     image(Up, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
     Down = loadImage("Down.png");
     image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+    stroke(5);//Add border
+    fill(255);//Color it white
+    rect((buttonX * 7), (menuHeight * menuIndentation), buttonSize*2, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+    fill(0);
+    textAlign(RIGHT, CENTER);
+    text("Red : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+    text("Green : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation) + (buttonSize/3), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+    text("Blue : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)* 2), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+    textAlign(CENTER, CENTER);
+    text(str(r), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+    text(str(g), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation) + (buttonSize/3), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+    text(str(b), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation) + ((buttonSize/3)* 2), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
   }
 }
 
