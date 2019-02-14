@@ -11,6 +11,18 @@ float brushAOE = 6;// Brush Area of Effect
 //Menu Icons
 PImage SaveIcon;
 PImage CircleBrush;
+PImage SquareBrush;
+
+enum BrushType{
+ circle,
+ square
+}
+
+BrushType brushType;
+
+float r;
+float g;
+float b;
 
 void setup(){
   size(700,700);//Size can be no less than 200
@@ -20,7 +32,7 @@ void setup(){
 void draw(){
   //This draws with the selected brush and color, sets the brush's center to the mouseX and mouseY
   if(mousePressed && mouseX > ((width*canvasIndentation) + (brushAOE/2)) && mouseX < (width - ((width*canvasIndentation)) - (brushAOE/2)) && mouseY > (menuHeight + (height * canvasIndentation) + (brushAOE/2)) && mouseY < (height - (height*canvasIndentation) - (brushAOE/2)) ){
-    rect((mouseX - (brushAOE/2)), (mouseY - (brushAOE/2)), brushAOE, brushAOE);
+    Brush(brushType, r, g, b);
   }
   
   //When mouse is over the Save Icon show hint, when it is not show the icon
@@ -29,6 +41,7 @@ void draw(){
     stroke(5);
     fill(255);
     rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+    
     //Draw Hint
     fill(0);
     textAlign(CENTER, CENTER);
@@ -40,6 +53,7 @@ void draw(){
     stroke(5);
     fill(255);
     rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+    
     //Draw Image
     image(SaveIcon, (menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
   }
@@ -51,6 +65,7 @@ void draw(){
     stroke(5);
     fill(255);
     rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+    
     //Draw Hint
     fill(0);
     textAlign(CENTER, CENTER);
@@ -61,7 +76,6 @@ void draw(){
     //Draw Circle Brush
     stroke(5);//Add border
     fill(255);//Color it white
-    CircleBrush = loadImage("CircleBrush.png");//Loading image "SaveIcon" for future use.
     rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
     image(CircleBrush,((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
   }
@@ -90,11 +104,19 @@ void mouseReleased(){
     //savedImage.save("SavedImages/" + "savedImage" + (str(files.length)) + "/" + "savedImage" + (str(files.length)) + ".jpg");
     savedImage.save("SavedImages/" + "savedImage" + (str(files.length)) + ".jpg");
   }
+  
+  //Change BrushType to Circle
+  if(mouseX > ((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) && mouseX < ((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) && mouseY > (menuHeight * menuIndentation) && mouseY < (menuHeight * menuIndentation) + (menuHeight - (menuHeight * menuIndentation) * 2))
+  {
+    brushType = BrushType.circle;
+  }
 }
 
 void DrawBackground(){
   background(240);//Light Gray background
   menuHeight = (height*0.1);//Menu height is a percentage of height
+  
+  brushType = BrushType.square;
   
   //Draw Menu
   line(0, menuHeight, width, menuHeight);//Just an aesthetic border
@@ -113,7 +135,14 @@ void DrawBackground(){
   //Draw Circle Brush
   stroke(5);//Add border
   fill(255);//Color it white
-  CircleBrush = loadImage("CircleBrush.png");//Loading image "SaveIcon" for future use.
+  CircleBrush = loadImage("CircleBrush.png");//Loading image "CircleBrush" for future use.
+  rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+  image(CircleBrush,((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
+  
+  //Draw Square Brush
+  stroke(5);//Add border
+  fill(255);//Color it white
+  SquareBrush = loadImage("SquareBrush.png");//Loading image "SquareBrush" for future use.
   rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
   image(CircleBrush,((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
   
@@ -121,4 +150,18 @@ void DrawBackground(){
   stroke(5);//Add border
   fill(255);//Color it white
   rect((width*canvasIndentation), (menuHeight + (height * canvasIndentation)), (width - ((width*canvasIndentation)*2)), ((height - ((height*canvasIndentation)*2)) - menuHeight));
+}
+
+
+void Brush(BrushType brush, float r, float g, float b){
+  switch(brushType){
+    case circle:
+    fill(r,g,b);
+    ellipse(mouseX - (brushAOE/2), mouseY - (brushAOE/2), brushAOE, brushAOE);
+    break;
+    case square:
+    fill(r,g,b);
+    rect(mouseX - (brushAOE/2), mouseY - (brushAOE/2), brushAOE, brushAOE);
+    break;
+  }
 }
