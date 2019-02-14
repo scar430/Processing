@@ -10,40 +10,60 @@ float brushAOE = 6;// Brush Area of Effect
 
 //Menu Icons
 PImage SaveIcon;
+PImage CircleBrush;
 
 void setup(){
-  
-  size(500, 500);//Size can be any size
-  background(240);//Light Gray background
-  menuHeight = (height*0.1);//Menu height is a eprcentage of height
-  
-  //Draw Menu
-  line(0, menuHeight, width, menuHeight);//Just an aesthetic border
-  fill(200);//Menu color
-  noStroke();//Remove border, this is replaced by the above line() function
-  rect(0,0,width, menuHeight);//Drawing the menu across the top of the screen
-  
-  //***MENU BUTTONS***
-  //Draw Save Button
-  stroke(5);//Add border
-  fill(255);//Color it white
-  SaveIcon = loadImage("SaveIcon.png");
-  rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
-  image(SaveIcon ,(menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
-  
-  //Draw change color button
-  
-  
-  //Draw Canvas
-  stroke(5);//Add border
-  fill(255);//Color it white
-  rect((width*canvasIndentation), (menuHeight + (height * canvasIndentation)), (width - ((width*canvasIndentation)*2)), ((height - ((height*canvasIndentation)*2)) - menuHeight));
+  size(700,700);//Size can be no less than 200
+  DrawBackground();
 }
 
 void draw(){
   //This draws with the selected brush and color, sets the brush's center to the mouseX and mouseY
   if(mousePressed && mouseX > ((width*canvasIndentation) + (brushAOE/2)) && mouseX < (width - ((width*canvasIndentation)) - (brushAOE/2)) && mouseY > (menuHeight + (height * canvasIndentation) + (brushAOE/2)) && mouseY < (height - (height*canvasIndentation) - (brushAOE/2)) ){
     rect((mouseX - (brushAOE/2)), (mouseY - (brushAOE/2)), brushAOE, brushAOE);
+  }
+  
+  //When mouse is over the Save Icon show hint, when it is not show the icon
+  if(mouseX > (menuHeight * menuIndentation) && mouseX < (menuHeight - (menuHeight * menuIndentation) * 2) && mouseY > (menuHeight * menuIndentation) && mouseY < (menuHeight - (menuHeight * menuIndentation) * 2)){
+    //Draw Background
+    stroke(5);
+    fill(255);
+    rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+    //Draw Hint
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text("Save \n Image", (menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+  }
+  else
+  {
+    //Draw Background
+    stroke(5);
+    fill(255);
+    rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+    //Draw Image
+    image(SaveIcon, (menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
+  }
+  
+  //When mouse is over the Circle Brush Icon show hint, when it is not show the icon
+  if(mouseX > ((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) && mouseX < ((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2) && mouseY > (menuHeight * menuIndentation) && mouseY < (menuHeight * menuIndentation) + (menuHeight - (menuHeight * menuIndentation) * 2))
+  {
+    //Draw Background
+    stroke(5);
+    fill(255);
+    rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+    //Draw Hint
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text("Circle\nBrush", ((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);
+  }
+  else
+  {
+    //Draw Circle Brush
+    stroke(5);//Add border
+    fill(255);//Color it white
+    CircleBrush = loadImage("CircleBrush.png");//Loading image "SaveIcon" for future use.
+    rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+    image(CircleBrush,((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
   }
 }
 
@@ -70,4 +90,35 @@ void mouseReleased(){
     //savedImage.save("SavedImages/" + "savedImage" + (str(files.length)) + "/" + "savedImage" + (str(files.length)) + ".jpg");
     savedImage.save("SavedImages/" + "savedImage" + (str(files.length)) + ".jpg");
   }
+}
+
+void DrawBackground(){
+  background(240);//Light Gray background
+  menuHeight = (height*0.1);//Menu height is a percentage of height
+  
+  //Draw Menu
+  line(0, menuHeight, width, menuHeight);//Just an aesthetic border
+  fill(200);//Menu color
+  noStroke();//Remove border, this is replaced by the above line() function
+  rect(0,0,width, menuHeight);//Drawing the menu across the top of the screen
+  
+  //***MENU BUTTONS***
+  //Draw Save Button
+  stroke(5);//Add border
+  fill(255);//Color it white
+  SaveIcon = loadImage("SaveIcon.png");//Loading image "SaveIcon" for future use.
+  rect((menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+  image(SaveIcon ,(menuHeight * menuIndentation), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
+  
+  //Draw Circle Brush
+  stroke(5);//Add border
+  fill(255);//Color it white
+  CircleBrush = loadImage("CircleBrush.png");//Loading image "SaveIcon" for future use.
+  rect(((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//This is part of the button aesthetics and also marks the boundries of the button
+  image(CircleBrush,((menuHeight * menuIndentation) * 2) + (menuHeight - (menuHeight * menuIndentation) * 2), (menuHeight * menuIndentation), menuHeight - (menuHeight * menuIndentation) * 2, menuHeight - (menuHeight * menuIndentation) * 2);//Drawing a square button to fit into the menu bar
+  
+  //Draw Canvas
+  stroke(5);//Add border
+  fill(255);//Color it white
+  rect((width*canvasIndentation), (menuHeight + (height * canvasIndentation)), (width - ((width*canvasIndentation)*2)), ((height - ((height*canvasIndentation)*2)) - menuHeight));
 }
