@@ -16,6 +16,8 @@ float brushAOE = 6;// Brush Area of Effect
 PImage SaveIcon;
 PImage CircleBrush;
 PImage SquareBrush;
+PImage Up;
+PImage Down;
 
 enum BrushType{
  circle,
@@ -61,7 +63,7 @@ void draw(){
   }
   
   //When mouse is over the Circle Brush Icon show hint, when it is not show the icon
-  if(mouseX > buttonX * 2 && mouseX < (buttonX * 2) + buttonSize && mouseY > (menuHeight * menuIndentation) && mouseY < (buttonSize * 2) + (menuHeight * menuIndentation))
+  if(mouseX > buttonX * 2 && mouseX < (buttonX * 2) + buttonSize && mouseY > (menuHeight * menuIndentation) && mouseY < (buttonSize) + (menuHeight * menuIndentation))
   {
     //Draw Background
     stroke(5);
@@ -81,11 +83,29 @@ void draw(){
     rect(buttonX * 2, (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
     image(CircleBrush, buttonX * 2, (menuHeight * menuIndentation), buttonSize, buttonSize);//Drawing a square button to fit into the menu bar
   }
+  if(mouseX > buttonX * 3 && mouseX < (buttonX * 3) + buttonSize && mouseY > (menuHeight * menuIndentation) && mouseY <(buttonSize) + (menuHeight * menuIndentation)){
+    //Draw Background
+    stroke(5);
+    fill(255);
+    rect(buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+    
+    //Draw Hint
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text("Square\nBrush", buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);
+  }
+  else{
+    //Draw Circle Brush
+    stroke(5);//Add border
+    fill(255);//Color it white
+    rect(buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+    image(SquareBrush, buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);//Drawing a square button to fit into the menu bar
+  }
 }
 
 void mouseReleased(){
   //When the players mouse is within the Save Button bounds it will save the canvas's current state
-  if(mouseX > (menuHeight * menuIndentation) && mouseX < (menuHeight - (menuHeight * menuIndentation) * 2) && mouseY > (menuHeight * menuIndentation) && mouseY < (menuHeight - (menuHeight * menuIndentation) * 2)){
+  if(mouseX > buttonX && mouseX < buttonX + buttonSize && mouseY > (menuHeight * menuIndentation) && mouseY < buttonSize + (menuHeight * menuIndentation)){
     
     /*Rounds canvas x/y positions and the canvas width/height to int to use in createImage() and updatePixels.
     The weird little additions and subtractions are to remove the border around the image.*/
@@ -156,6 +176,14 @@ void DrawBackground(){
   rect(buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
   image(SquareBrush, buttonX * 3, (menuHeight * menuIndentation), buttonSize, buttonSize);//Drawing a square button to fit into the menu bar
   
+  //Draw Red up/down
+  stroke(5);//Add border
+  fill(255,0,0);//Color it white
+  Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
+  rect((buttonX * 4), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+  image(Up, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
+  Down = loadImage("Down.png");
+  image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);
   
   //Draw Canvas
   stroke(5);//Add border
