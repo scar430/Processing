@@ -26,9 +26,9 @@ enum BrushType{
 
 BrushType brushType;
 
-float r;
-float g;
-float b;
+float r = 255;
+float g = 255;
+float b = 255;
 
 void setup(){
   size(700,700);//Size can be no less than 200
@@ -137,6 +137,30 @@ void mouseReleased(){
   if(mouseX > buttonX * 3 && mouseX < (buttonX * 3) + buttonSize && mouseY > (menuHeight * menuIndentation) && mouseY <(buttonSize) + (menuHeight * menuIndentation)){
     brushType = BrushType.square;
   }
+  
+  //Red Up
+  if(mouseX > (buttonX * 4) + (buttonSize*.25) && mouseX < (buttonX * 4) + (buttonSize*.25) + (buttonSize/2) && mouseY > (menuHeight * menuIndentation) && mouseY < (buttonSize/3)){
+    r += 5;
+    //Draw Red up/down
+    stroke(5);//Add border
+    fill(r,0,0);//Color it white
+    Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
+    rect((buttonX * 4), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+    image(Up, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
+    Down = loadImage("Down.png");
+    image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+  }
+  if(mouseX > (buttonX * 4) + (buttonSize*.25) && mouseX < (buttonX * 4) + (buttonSize*.25) + (buttonSize/2) && mouseY > ((menuHeight * menuIndentation) + ((buttonSize/3)*2)) && mouseY < ((menuHeight * menuIndentation) + ((buttonSize/3)*2) + buttonSize/3)){
+    r -= 5;
+    //Draw Red up/down
+    stroke(5);//Add border
+    fill(r,0,0);//Color its color
+    Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
+    rect((buttonX * 4), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+    image(Up, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
+    Down = loadImage("Down.png");
+    image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+  }
 }
 
 void DrawBackground(){
@@ -178,12 +202,44 @@ void DrawBackground(){
   
   //Draw Red up/down
   stroke(5);//Add border
-  fill(255,0,0);//Color it white
+  fill(r,0,0);//Color it white
   Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
   rect((buttonX * 4), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
   image(Up, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
   Down = loadImage("Down.png");
-  image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);
+  image(Down, (buttonX * 4) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+  
+  //Draw Green up/down
+  stroke(5);//Add border
+  fill(0,g,0);//Color it white
+  Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
+  rect((buttonX * 5), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+  image(Up, (buttonX * 5) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
+  Down = loadImage("Down.png");
+  image(Down, (buttonX * 5) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+  
+  //Draw Blue up/down
+  stroke(5);//Add border
+  fill(0,0,b);//Color it white
+  Up = loadImage("Up.png");//Loading image "SquareBrush" for future use.
+  rect((buttonX * 6), (menuHeight * menuIndentation), buttonSize, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+  image(Up, (buttonX * 6) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize/2, buttonSize/3);//Drawing a square button to fit into the menu bar
+  Down = loadImage("Down.png");
+  image(Down, (buttonX * 6) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)*2), buttonSize/2, buttonSize/3);
+  
+  //Draw Color Log
+  stroke(5);//Add border
+  fill(255);//Color it white
+  rect((buttonX * 7), (menuHeight * menuIndentation), buttonSize*2, buttonSize);//This is part of the button aesthetics and also marks the boundries of the button
+  fill(0);
+  textAlign(RIGHT, CENTER);
+  text("Red : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+  text("Green : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation) + (buttonSize/3), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+  text("Blue : ", (buttonX * 7) + (buttonSize*.25), (menuHeight * menuIndentation) + ((buttonSize/3)* 2), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+  textAlign(CENTER, CENTER);
+  text(str(r), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+  text(str(g), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation) + (buttonSize/3), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
+  text(str(b), (buttonX * 7) + (buttonSize), (menuHeight * menuIndentation) + ((buttonSize/3)* 2), buttonSize, buttonSize/3);//Drawing a square button to fit into the menu bar
   
   //Draw Canvas
   stroke(5);//Add border
@@ -195,10 +251,12 @@ void DrawBackground(){
 void Brush(BrushType brush, float r, float g, float b){
   switch(brushType){
     case circle:
+    noStroke();
     fill(r,g,b);
     ellipse(mouseX - (brushAOE/2), mouseY - (brushAOE/2), brushAOE, brushAOE);
     break;
     case square:
+    noStroke();
     fill(r,g,b);
     rect(mouseX - (brushAOE/2), mouseY - (brushAOE/2), brushAOE, brushAOE);
     break;
