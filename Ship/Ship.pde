@@ -45,7 +45,8 @@ void newTarget(){
  yLength = y - curY;//Distance of target y and current y position
    magnitude = sqrt(x * x + y * y);//finding the magnitude
    if(magnitude != 0){
-     xLength /= magnitude;//This is supposed to create a normalized x value but i don't know if i am doing it right since the further apart the target and current object are the faster it moves, or maybe I'm miss understanding what normalizing is?
+     //This is supposed to create a normalized x value but i don't know if i am doing it right since the further apart the target and current object are the faster it moves, or maybe I'm miss understanding what the point of normalizing is?
+     xLength /= magnitude;
      yLength /= magnitude; 
    } 
 }
