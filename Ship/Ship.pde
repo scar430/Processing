@@ -13,8 +13,6 @@ float yLength;
 
 float magnitude;//magnitude of current position and target position
 
-float nM; //normalized magnitude
-
 void setup(){
   size(400,400);
   curX =1;

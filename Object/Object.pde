@@ -20,10 +20,10 @@ class Primitive {
     w = 0;
     h = 0;
     
-    red = 0;
-    green = 0;
-    blue = 0;
-    alpha = 0;
+    red = 255;
+    green = 255;
+    blue = 255;
+    alpha = 255;
     stroke = 0;
   }
 
@@ -32,6 +32,6 @@ class Primitive {
   void drawPrimitive() {
     stroke(stroke);
     fill(red, green, blue, alpha);
-    rect(x, y, w, h);
+    rect(x, y, w, h); 
   }
 }
