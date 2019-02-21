@@ -1,8 +1,10 @@
+//Seth Banker
 
+//Target folder
 String folderPath = "testFolder/";
 
 public void settings(){
- size(800,800); 
+ size(250, 50); 
 }
 
 void setup(){
