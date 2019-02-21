@@ -8,7 +8,7 @@ ddRB playerRB;
 
 //Incoming Meteors
 PImage meteorSprite;
-ArrayList<rPrimitive> meteors;
+ArrayList<ddRB> meteors;
 
 //Background Stars
 ArrayList<rPrimitive> starsS;//First layer of stars, biggest and brightest
@@ -22,7 +22,7 @@ public void settings() {
 void setup() {
   background(100);
   
-  meteors = new ArrayList<rPrimitive>();
+  meteors = new ArrayList<ddRB>();
   meteors.clear();
   
   starsS = new ArrayList<rPrimitive>();
@@ -47,16 +47,17 @@ void draw() {
   }
   
   if(meteors.size() < 5){
-    rPrimitive meteor = new rPrimitive(random(0.0F, width), 0.0F, 40.0F, 40.0F, 255.0F, 255.0F, 255.0F, 255.0F, 0.0F, meteorSprite);
+    rPrimitive meteorPrim = new rPrimitive(random(0.0F, width), 0.0F, 40.0F, 40.0F, 255.0F, 255.0F, 255.0F, 255.0F, 0.0F, meteorSprite);
+    ddRB meteor = new ddRB(meteorPrim, 0);//velocity not needed for this.
     meteors.add(meteor);
   }
   
   player.createPrim();//draw player sprite
   
   //For all the meteors in the ArrayList 'meteors' add 2 to their y
-  for(rPrimitive meteor : meteors){
-    meteor.y += 2;
-    meteor.createPrim();
+  for(ddRB meteor : meteors){
+    meteor.object.y += 2;
+    meteor.object.createPrim();
   }
   
   /*if(starsS.size() < 5){
