@@ -13,7 +13,6 @@ class ddRB {
   
   //used for moving one vector to another
   void direction(float tX, float tY){
-      float magnitude;
       float xLength;
       float yLength;
     

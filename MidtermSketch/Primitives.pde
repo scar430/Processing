@@ -18,24 +18,35 @@ class rPrimitive{
   //stroke width
   float stroke;
   
-  rPrimitive(){
-    x = 0;
-    y = 0;
-    w = 0;
-    h = 0;
+  //Sprite used for the object
+  PImage image;
+  
+  rPrimitive(float _x, float _y, float _w, float _h, float _red, float _green, float _blue, float _alpha, float _stroke, PImage _image){
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
     
-    red = 255;
-    green = 255;
-    blue = 255;
-    alpha = 255;
+    red = _red;
+    green = _green;
+    blue = _blue;
+    alpha = _alpha;
     
-    stroke = 0;
+    stroke = _stroke;
+    
+    image = _image;
   }
   
   //drawPrim() draws the rPrimitive object
   void createPrim(){
     fill(red, green, blue, alpha);
     stroke(stroke);
-    rect(x, y, w, h);
+    if(image != null){
+      image(image, x, y, w, h);
+    }
+    else
+    {
+      rect(x, y, w, h);
+    }
   }
 }
