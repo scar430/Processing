@@ -55,14 +55,8 @@ void draw() {
   
   switch(state){
     case Menu:
-      background(0);
-      startMenu.display();
-      Vector vector = new Vector(mouseX, mouseY);
-      if(startMenu.buttons[0].CheckBounds(vector) == true){
-        if(mousePressed){
-          setPlayer();
-        }
-      }
+      background(0);//wipe background
+      startMenu.display();//Show the Start Menu
     break;
     
     case Difficulty:
@@ -77,7 +71,7 @@ void draw() {
         Move the players rigidbody towards the target position using the direction(float, float) function.
         This will move the players rigidbody and all other involved aspects towards the target x and y.
         */
-        player.direction(mouseX, mouseY);
+        player.direction(mouseX - (player.object.w/2), mouseY - (player.object.h/2));
       }
       
       
@@ -132,21 +126,22 @@ void draw() {
     break;
     
     case Death:
-      death();
-      if(keyPressed || mousePressed){
-        state = gameState.Menu;
-      }
+      death();//Make Death screen
+      delay(2000);
     break;
   }
   
   print(state + "\n");
 }
 
-/*void mouseReleased(){
+void mouseReleased(){
   switch(state){
     case Menu:
-    if(value == ){
-      
+    Vector vector = new Vector(mouseX, mouseY);//Make a new vector to reference in CheckBounds()
+    //If the mouse is within the buttons bounds
+    if(startMenu.buttons[0].CheckBounds(vector) == true){
+      setPlayer();//Reset the player
+      state = gameState.Game;
     }
     break;
     
@@ -159,10 +154,10 @@ void draw() {
     break;
     
     case Death:
-    
+    state = gameState.Menu;
     break;
   }
-}*/
+}
 
 void death(){
   print("COLLISION\n");//Debug, detect collisions.
@@ -182,10 +177,10 @@ void death(){
   image(deathScreen, 0, 0, width, height);//Draw the "PGraphic deathScreen", as an image and make it take up the whole screen
 }
 
+//Set the players position to default position.
 void setPlayer(){
-  waveTime = millis() + waveInt;
-  waves.clear();
-  player.object.x = (width/2) - (player.object.w/2);
-  player.object.y = height - player.object.h;
-  state = gameState.Game;
+  waveTime = millis() + waveInt;//Reset the time for wave intervals
+  waves.clear();//Remove allthe waves
+  player.object.x = (width/2) - (player.object.w/2);//Reset player x
+  player.object.y = height - player.object.h;//Reset the player y
 }
