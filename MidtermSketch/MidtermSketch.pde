@@ -1,76 +1,158 @@
 //Seth Banker
 //Executive file, this is where the magic happens
 
-//Player, a separate object for containing all these hasn't been made.
-PImage playerSprite;
-rPrimitive player;
-ddRB playerRB;
+Menu startMenu;
 
-//Incoming Meteors
-PImage meteorSprite;
-ArrayList<ddRB> meteors;
+//Player Code.
+PImage playerSprite;//PImage used to represent the player, used in conjunction with an "playerPrimitive".
+rPrimitive playerPrimitive;//rPrimitive used to represent the player, used in conjunction with "playerSprite".
+RigidBody player;//2D RigidBody used for applying physics to the player, used in conjunction with "playerPrimitive"
 
-//Background Stars
-ArrayList<rPrimitive> starsS;//First layer of stars, biggest and brightest
-ArrayList<rPrimitive> starsSS;//Second layer of stars
-ArrayList<rPrimitive> starsSSS;//Third layer of stars, smallest and dullest.
+//Meteor Waves Code.
+ArrayList<EntityWave> waves = new ArrayList<EntityWave>();//ArrayList used to manage Meteor Waves, also helps with performance as you can stop using waves when you are done with them.
+int waveTime;//Integer used to benchmark time and signals waves, used in conjunction with "waveInt".
+int waveInt = 1000;//Integer used as an interval and is added onto "waveTime" in order to refresh it.
+PImage meteorSprite;//PImage used to represent meteors.
+
+PGraphics deathScreen;//PGraphic that is drawn on death to indicate the game is over.
+
+enum gameState{
+  Menu, 
+  Difficulty,
+  Game
+}
+
+gameState state = gameState.Menu;
 
 public void settings() {
-  size(500, 500);
+  size(400, 400, P3D);//P3D mode was added in order to add z values. This helps with PGraphics.
 }
 
 void setup() {
-  background(100);
+  deathScreen = createGraphics(width, height);//deathScreen the PGraphic is initialized here.
   
-  meteors = new ArrayList<ddRB>();
-  meteors.clear();
-  
+  waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
+
+  /*
   starsS = new ArrayList<rPrimitive>();
   starsSS = new ArrayList<rPrimitive>();
   starsSSS = new ArrayList<rPrimitive>();
-
-  playerSprite = loadImage("playerSprite.png");
-  meteorSprite = loadImage("meteorSprite.png");
-  player = new rPrimitive(width/2-30.0F, height - 30.0F, 30.0F, 30.0F, 0.0F, 100.0F, 200.0F, 255.0F, 5.0F, playerSprite);//Rectangle Primitive from rPrimitive class, this one is gonna be the player.
-  playerRB = new ddRB(player, 5);
+  */
+  
+  meteorSprite = loadImage("meteorSprite.png");//meteorSprite, the PImage, is initialized as a file known as "meteorSprite.png" and is located in sketchPath().
+  
+  //Player Initialize code.
+  playerSprite = loadImage("playerSprite.png");//playerSprite, the PImage, is initialized as a file known as "playerSprite.png" and is located in sketchPath().
+  playerPrimitive = new rPrimitive(width/2-30.0F, height - 30.0F, 30.0F, 30.0F, 0.0F, 100.0F, 200.0F, 255.0F, 5.0F, playerSprite);//playerPrimitive ,the rPrimitive, is initialized here and used in conjunction with "player", the ddRb (2D rigidbody).
+  player = new RigidBody(playerPrimitive, 5);//player, the ddRB (2D rigidbody), is used to enact forces onto the player.
+  
+  //Menu Initialize
+  rPrimitive buttonDisplay = new rPrimitive(0, 0, width * 0.5, height * 0.25, 255, 255, 255, 255, 5, null);
+  Button startGame = new Button((width * 0.25), (height * 0.25), (width * 0.5), (height * 0.25),  "Start Game", buttonDisplay);
+  rPrimitive menuDisplay = new rPrimitive(0, 0, width, height, 255, 255, 255, 255, 0, null);
+  Button[] buttons = { startGame };
+  startMenu = new Menu(0, 0, width, height, menuDisplay, buttons);
 }
 
 void draw() {
-  background (30);//clear
-  
-  //If any mouse button is pressed...
-  if (mousePressed) {
-    //Move the players rigidbody towards the target position, target position is where ever the player clicks
-    float x = mouseX;
-    float y = mouseY;
-    playerRB.direction(x, y);
+  background (30);//Background is set to 30, a little lighter than black, helps reduce the loss of detail.
+  switch(state){
+    case Menu:
+      background(0);
+      startMenu.display();
+      Vector vector = new Vector(mouseX, mouseY);
+      if(startMenu.buttons[0].CheckBounds(vector) == true){
+        if(mousePressed){
+          state = gameState.Game;
+        }
+      }
+    break;
+    
+    case Difficulty:
+      
+    break;
+    
+    case Game:
+      background(0);
+      //If any mouse button is pressed...
+      if (mousePressed) {
+        /*
+        Move the players rigidbody towards the target position using the direction(float, float) function.
+        This will move the players rigidbody and all other involved aspects towards the target x and y.
+        */
+        player.direction(mouseX, mouseY);
+      }
+      
+      
+      //Out of Bounds Code.
+      //If player is outside of the RIGHT bounds...
+      if((player.object.x + player.object.w) > width){
+        player.object.x = (width - player.object.w);//Reset the player back to where there x was before crossing the bounds.
+      }
+      //If player is outside of the LEFT bounds...
+      if(player.object.x < 0){
+        player.object.x = 0;//Reset the player back to where there x was before crossing the bounds.
+      }
+      //If player is outside of the BOTTOM bounds...
+      if(player.object.y + player.object.h > height){
+        player.object.y = (height - player.object.h);//Reset the player back to where there x was before crossing the bounds.
+      }
+      //If player is outside of the TOP bounds...
+      if(player.object.y < 0){
+        player.object.y = 0;//Reset the player back to where there x was before crossing the bounds.
+      }
+      
+      //Collision Code
+      //For all of the waves
+      for(EntityWave wave : waves){
+        //For all of the meteors in these waves
+        for(RigidBody rb : wave.meteors){
+          //If the players x and x + width are within the bounds of the meteor...
+         if(player.object.x > rb.object.x && player.object.x < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)|| (player.object.x + player.object.w) > rb.object.x && (player.object.x + player.object.w) < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)){
+           death();//die :(
+         }
+        }
+      }
+      
+      //***NOTE*** implement ship turning towards the mouse and resetting position on mouse release
+      playerPrimitive.display();//Draw player PImage, this is the visual representation of the player.
+      
+      //If the allotted time has passed... (current time > allotted time)
+      if (millis() > waveTime) {
+        waveTime += waveInt;//Add waveInt to waveTime in order to create the next time benchmark.
+        EntityWave wave = new EntityWave(5);//Create a new EntityWave since the benchmark has been reached
+        wave.createWave();//Create the new wave
+        waves.add(wave);//Add the wave to the ArrayList, waves, in order to use it.
+        
+        print("New Wave!\n");//Debug feature to signal new wave.
+      }
+      
+      //For every EntityWave in waves : wave.moveWave(ArrayList waves). This applies the Physics method direction(float, float) to all entites in the wave.
+      for(EntityWave wave : waves){
+        //This applies the Physics method direction(float, float) to all entites in the wave and parses in the ArrayList "waves" in order to remove the element from the list when it is no longer in view.
+        wave.moveWave();
+      }
+    break;
   }
+}
+
+//Creates a "Death Screen" using a PGraphic and displays when the player collides with a meteor.
+void death(){
+  print("COLLISION\n");//Debug, detect collisions.
+      
+  //Death Screen Code.
+  deathScreen.beginDraw();//Being drawing the "PGraphic deathScreen".
+  background(0);//Wipe the background and color it black.
+  textAlign(CENTER, CENTER);//Text in the center of the screen.
+  textSize(100);//Text size is 100.
+  fill(255);//The text color is white.
+  text("YOU DIED", 0, 0, width, height);//Display textBox with the string "YOU DIED".
+  deathScreen.endDraw();//End drawing the "PGraphic deathScreen".
   
-  if(meteors.size() < 5){
-    rPrimitive meteorPrim = new rPrimitive(random(0.0F, width), 0.0F, 40.0F, 40.0F, 255.0F, 255.0F, 255.0F, 255.0F, 0.0F, meteorSprite);
-    ddRB meteor = new ddRB(meteorPrim, 0);//velocity not needed for this.
-    meteors.add(meteor);
-  }
+  //Display PGraphic Code.
+  translate(0, 0, 9999);//Translate the z-value to 999. (Most reliable, higher values can sometimes cause blank images).
+  image(deathScreen, 0, 0, width, height);//Draw the "PGraphic deathScreen", as an image and make it take up the whole screen
   
-  player.createPrim();//draw player sprite
-  
-  //For all the meteors in the ArrayList 'meteors' add 2 to their y
-  for(ddRB meteor : meteors){
-    meteor.object.y += 2;
-    meteor.object.createPrim();
-  }
-  
-  /*if(starsS.size() < 5){
-    rPrimitive star = new rPrimitive(random(0.0F, width), 0.0F, 4.0F, 12.0F, 255.0F, 255.0F, 255.0F, 255.0F, 0.0F, null);
-    starsS.add(star);
-  }
-  
-  for(rPrimitive star : starsS){
-    star.x += 1;
-  }*/
-  
-  
-  //***NOTE*** implement ship turning towards the mouse and resetting position on mouse release
-  
-  //draw current player state.
+  state = gameState.Menu;
+  //stop();//Stop the sketch.
 }
