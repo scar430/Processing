@@ -19,7 +19,8 @@ PGraphics deathScreen;//PGraphic that is drawn on death to indicate the game is 
 enum gameState{
   Menu, 
   Difficulty,
-  Game
+  Game,
+  Death
 }
 
 gameState state = gameState.Menu;
@@ -30,14 +31,9 @@ public void settings() {
 
 void setup() {
   deathScreen = createGraphics(width, height);//deathScreen the PGraphic is initialized here.
+  death();
   
   waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
-
-  /*
-  starsS = new ArrayList<rPrimitive>();
-  starsSS = new ArrayList<rPrimitive>();
-  starsSSS = new ArrayList<rPrimitive>();
-  */
   
   meteorSprite = loadImage("meteorSprite.png");//meteorSprite, the PImage, is initialized as a file known as "meteorSprite.png" and is located in sketchPath().
   
@@ -56,6 +52,7 @@ void setup() {
 
 void draw() {
   background (30);//Background is set to 30, a little lighter than black, helps reduce the loss of detail.
+  
   switch(state){
     case Menu:
       background(0);
@@ -63,7 +60,7 @@ void draw() {
       Vector vector = new Vector(mouseX, mouseY);
       if(startMenu.buttons[0].CheckBounds(vector) == true){
         if(mousePressed){
-          state = gameState.Game;
+          setPlayer();
         }
       }
     break;
@@ -106,10 +103,10 @@ void draw() {
       //For all of the waves
       for(EntityWave wave : waves){
         //For all of the meteors in these waves
-        for(RigidBody rb : wave.meteors){
+        for(RigidBody rb : wave.channel.values()){
           //If the players x and x + width are within the bounds of the meteor...
          if(player.object.x > rb.object.x && player.object.x < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)|| (player.object.x + player.object.w) > rb.object.x && (player.object.x + player.object.w) < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)){
-           death();//die :(
+           state = gameState.Death;//die :(
          }
         }
       }
@@ -133,10 +130,40 @@ void draw() {
         wave.moveWave();
       }
     break;
+    
+    case Death:
+      death();
+      if(keyPressed || mousePressed){
+        state = gameState.Menu;
+      }
+    break;
   }
+  
+  print(state + "\n");
 }
 
-//Creates a "Death Screen" using a PGraphic and displays when the player collides with a meteor.
+/*void mouseReleased(){
+  switch(state){
+    case Menu:
+    if(value == ){
+      
+    }
+    break;
+    
+    case Difficulty:
+    
+    break;
+    
+    case Game:
+    
+    break;
+    
+    case Death:
+    
+    break;
+  }
+}*/
+
 void death(){
   print("COLLISION\n");//Debug, detect collisions.
       
@@ -144,15 +171,21 @@ void death(){
   deathScreen.beginDraw();//Being drawing the "PGraphic deathScreen".
   background(0);//Wipe the background and color it black.
   textAlign(CENTER, CENTER);//Text in the center of the screen.
-  textSize(100);//Text size is 100.
+  textSize(25);//Text size is 100.
   fill(255);//The text color is white.
-  text("YOU DIED", 0, 0, width, height);//Display textBox with the string "YOU DIED".
+  text("YOU DIED", 0, height/2 - 25, width, 50);//Display textBox with the string "YOU DIED".
+  text("Press any button to continue.", 0, height/2 + 25, width, 50);//Display textBox with the string "YOU DIED".
   deathScreen.endDraw();//End drawing the "PGraphic deathScreen".
   
   //Display PGraphic Code.
-  translate(0, 0, 9999);//Translate the z-value to 999. (Most reliable, higher values can sometimes cause blank images).
+  translate(0, 0, 999);//Translate the z-value to 999. (Most reliable, higher values can sometimes cause blank images).
   image(deathScreen, 0, 0, width, height);//Draw the "PGraphic deathScreen", as an image and make it take up the whole screen
-  
-  state = gameState.Menu;
-  //stop();//Stop the sketch.
+}
+
+void setPlayer(){
+  waveTime = millis() + waveInt;
+  waves.clear();
+  player.object.x = (width/2) - (player.object.w/2);
+  player.object.y = height - player.object.h;
+  state = gameState.Game;
 }
