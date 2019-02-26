@@ -44,10 +44,11 @@ void setup() {
   
   //Menu Initialize
   rPrimitive buttonDisplay = new rPrimitive(0, 0, width * 0.5, height * 0.25, 255, 255, 255, 255, 5, null);
-  Button startGame = new Button((width * 0.25), (height * 0.25), (width * 0.5), (height * 0.25),  "Start Game", buttonDisplay);
+  Button startGame = new Button((width * 0.25), (height * 0.25), (width * 0.5), (height * 0.10),  "Start Game", buttonDisplay);
   rPrimitive menuDisplay = new rPrimitive(0, 0, width, height, 255, 255, 255, 255, 0, null);
   Button[] buttons = { startGame };
   startMenu = new Menu(0, 0, width, height, menuDisplay, buttons);
+  //difficultyMenu = new Menu(0, 0, width, height, )
 }
 
 void draw() {
@@ -127,7 +128,6 @@ void draw() {
     
     case Death:
       death();//Make Death screen
-      delay(2000);
     break;
   }
   
@@ -142,6 +142,9 @@ void mouseReleased(){
     if(startMenu.buttons[0].CheckBounds(vector) == true){
       setPlayer();//Reset the player
       state = gameState.Game;
+    }
+    if(startMenu.buttons[1].CheckBounds(vector) == true){
+      state = gameState.Difficulty;
     }
     break;
     
