@@ -1,20 +1,27 @@
 //Seth Banker
 //Executive file, this is where the magic happens
 
+//Menu Variables
 Menu startMenu;
+PImage menuScreen;
 
-//Player Code.
+//Player Variables.
 PImage playerSprite;//PImage used to represent the player, used in conjunction with an "playerPrimitive".
 rPrimitive playerPrimitive;//rPrimitive used to represent the player, used in conjunction with "playerSprite".
 RigidBody player;//2D RigidBody used for applying physics to the player, used in conjunction with "playerPrimitive"
 
-//Meteor Waves Code.
+//Meteor Waves Variables.
 ArrayList<EntityWave> waves = new ArrayList<EntityWave>();//ArrayList used to manage Meteor Waves, also helps with performance as you can stop using waves when you are done with them.
 int waveTime;//Integer used to benchmark time and signals waves, used in conjunction with "waveInt".
 int waveInt = 1000;//Integer used as an interval and is added onto "waveTime" in order to refresh it.
 PImage meteorSprite;//PImage used to represent meteors.
 
+//Stars
+PImage stars;
+
+//Death Variables
 PGraphics deathScreen;//PGraphic that is drawn on death to indicate the game is over.
+int score = 0;
 
 enum gameState{
   Menu, 
@@ -30,8 +37,11 @@ public void settings() {
 }
 
 void setup() {
+  menuScreen = loadImage("menuScreen.jpg");
+  
+  stars = loadImage("stars.gif");
+  
   deathScreen = createGraphics(width, height);//deathScreen the PGraphic is initialized here.
-  death();
   
   waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
   
@@ -43,21 +53,22 @@ void setup() {
   player = new RigidBody(playerPrimitive, 5);//player, the ddRB (2D rigidbody), is used to enact forces onto the player.
   
   //Menu Initialize
-  rPrimitive buttonDisplay = new rPrimitive(0, 0, width * 0.5, height * 0.25, 255, 255, 255, 255, 5, null);
-  Button startGame = new Button((width * 0.25), (height * 0.25), (width * 0.5), (height * 0.10),  "Start Game", buttonDisplay);
-  rPrimitive menuDisplay = new rPrimitive(0, 0, width, height, 255, 255, 255, 255, 0, null);
+  rPrimitive buttonDisplay = new rPrimitive(0, 0, width * 0.5, height * 0.25, 0, 0, 0, 255, 255, null);
+  Button startGame = new Button((width * 0.25), (height * 0.5), (width * 0.5), (height * 0.10),  "Start Game", buttonDisplay);
+  rPrimitive menuDisplay = new rPrimitive(0, 0, width, height, 255, 255, 255, 255, 0, menuScreen);
   Button[] buttons = { startGame };
   startMenu = new Menu(0, 0, width, height, menuDisplay, buttons);
   //difficultyMenu = new Menu(0, 0, width, height, )
 }
 
 void draw() {
-  background (30);//Background is set to 30, a little lighter than black, helps reduce the loss of detail.
-  
   switch(state){
     case Menu:
       background(0);//wipe background
       startMenu.display();//Show the Start Menu
+      fill(255);
+      textSize(40);
+      text("METEOR SHOWER", 0, (height * 0.15), width, height * 0.25);
     break;
     
     case Difficulty:
@@ -65,7 +76,9 @@ void draw() {
     break;
     
     case Game:
-      background(0);
+      pushMatrix();
+      image(stars, 0, 0, width, height);
+      popMatrix();
       //If any mouse button is pressed...
       if (mousePressed) {
         /*
@@ -143,9 +156,9 @@ void mouseReleased(){
       setPlayer();//Reset the player
       state = gameState.Game;
     }
-    if(startMenu.buttons[1].CheckBounds(vector) == true){
+    /*if(startMenu.buttons[1].CheckBounds(vector) == true){
       state = gameState.Difficulty;
-    }
+    }*/
     break;
     
     case Difficulty:
@@ -174,6 +187,12 @@ void death(){
   text("YOU DIED", 0, height/2 - 25, width, 50);//Display textBox with the string "YOU DIED".
   text("Press any button to continue.", 0, height/2 + 25, width, 50);//Display textBox with the string "YOU DIED".
   deathScreen.endDraw();//End drawing the "PGraphic deathScreen".
+  
+  //Record Score
+  String name = "bob";
+  String[] score = { name};
+  File[] files = listFiles("HighScores");
+  saveStrings("HighScores/" + "Score" + str(files.length) + ".txt", score);
   
   //Display PGraphic Code.
   translate(0, 0, 999);//Translate the z-value to 999. (Most reliable, higher values can sometimes cause blank images).

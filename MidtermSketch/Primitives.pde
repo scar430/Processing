@@ -42,7 +42,6 @@ class rPrimitive{
   void display(){
     fill(red, green, blue, alpha);//Color using the RGBA values defined above.
     stroke(stroke);//Stroke using the width of the stroke defined above.
-    
     //If the PImage value is NOT null then draw the primitive as an image.
     if(image != null){
       image(image, x, y, w, h);//Draw Image using the PImage, x, y, width, height values defined above.

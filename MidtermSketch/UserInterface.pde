@@ -65,8 +65,10 @@ class Menu{
   
   void display(){
     visual.display();
-    for(Button butts : buttons){
-      butts.display();
+    float xCenter = width/2;
+    float yCenter = height/2;
+    for(Button butt : buttons){
+      butt.display();
     }
   }
 }

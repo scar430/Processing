@@ -45,6 +45,7 @@ class EntityWave{
       rb.object.display();
       if(rb.object.y > height + rb.object.h){
         channel.values().remove(rb);
+        score += 1;
         break;
       }
     }
