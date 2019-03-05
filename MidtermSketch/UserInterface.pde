@@ -1,6 +1,9 @@
 //Seth Banker
 //Collection of UI stuff
 
+//Looking back now, this was sparse on comments as I was messing around a lot and just was trying to get it to work. I think looking through the project it becomes easy to understand my methodology and most things in here are self-explanatory.
+
+//Button, basically an rPrimitive with an easy function for checking bounds.
 class Button{
   
   float x;
@@ -34,23 +37,27 @@ class Button{
     text(label, x, y, w, h);
   }
   
+  //This is often used as a variable in 'if' statements.
   Boolean CheckBounds(Vector object){
     if(object.x > x && object.x < x + w && object.y > y && object.y < y + h){
+      //In bounds
       return true;
     }
     else{
+      //Not in bounds
       return false; 
     }
   }
 }
 
+//Was gonna add functionality for formatting and aligning buttons however the plan fell through as I already have the application workign and don't want to mess it up.
 class Menu{
   float x;
   float y;
   float w;
   float h;
   
-  rPrimitive visual;
+  rPrimitive visual;//Background
   
   Button[] buttons;
   
@@ -66,6 +73,7 @@ class Menu{
   void display(){
     visual.display();
     for(Button butt : buttons){
+      //teehee, butt.
       butt.display();
     }
   }

@@ -1,4 +1,5 @@
 //Seth Banker
+//***NOTE*** scores are stored in a file called HighScores and contain text files that show the core, time, and date.
 //Executive file, this is where the magic happens
 
 //Menu Variables
@@ -17,15 +18,17 @@ int waveInt = 1000;//Integer used as an interval and is added onto "waveTime" in
 PImage meteorSprite;//PImage used to represent meteors.
 
 //Stars
-PImage stars;
+PImage star;
+PImage[] stars = new PImage[2];//Stars will be moved together
 
-//Score
+//Score, the two are used to mark start time and end time.
 int startScore;
 int endScore;
 
+//enumerator for menus and setting game states
 enum gameState{
   Menu, 
-  Difficulty,
+  Difficulty,//deprecated
   Game,
   Death
 }
@@ -39,7 +42,7 @@ public void settings() {
 void setup() {
   menuScreen = loadImage("menuScreen.jpg");
   
-  stars = loadImage("stars.gif");
+  star = loadImage("stars.gif");
   
   waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
   
@@ -75,7 +78,7 @@ void draw() {
     
     case Game:
       pushMatrix();
-      image(stars, 0, 0, width, height);
+      image(star, 0, 0, width, height);
       popMatrix();
       //If any mouse button is pressed...
       if (mousePressed) {
@@ -142,8 +145,6 @@ void draw() {
       death();//Make Death screen
     break;
   }
-  
-  print(state + "\n");
 }
 
 void mouseClicked(){
@@ -152,6 +153,8 @@ void mouseClicked(){
     Vector vector = new Vector(mouseX, mouseY);//Make a new vector to reference in CheckBounds()
     //If the mouse is within the buttons bounds
     if(startMenu.buttons[0].CheckBounds(vector) == true){
+      
+      //Setup the game and start it.
       setPlayer();//Reset the player
       state = gameState.Game;
       startScore = millis();
@@ -189,10 +192,10 @@ void death(){
 
 void printScore(int score){
   //Record Score
-  String printScore = "User survived " + str(score) + " seconds in the Meteor Shower at " + str(hour()) + ":" + (str(minute())) + " on " + str(month()) + "/" + str(day()) + "/" + str(year());
-  String[] scoreAssembler = { printScore};
-  File[] files = listFiles("HighScores");
-  saveStrings("HighScores/" + "Score_" + str(files.length) + ".txt", scoreAssembler);
+  String printScore = "User survived " + str(score) + " seconds in the Meteor Shower at " + str(hour()) + ":" + (str(minute())) + " on " + str(month()) + "/" + str(day()) + "/" + str(year());//Show score, time, date.
+  String[] scoreAssembler = { printScore};//Not sure if you needed an array to put it into a txt file but I thought i'd do it anyway
+  File[] files = listFiles("HighScores");//count the files to use it in the name of the file we're about to make, this prevents overwriting files.
+  saveStrings("HighScores/" + "Score_" + str(files.length) + ".txt", scoreAssembler);//create that bad boi >:)
 }
 
 //Set the players position to default position.

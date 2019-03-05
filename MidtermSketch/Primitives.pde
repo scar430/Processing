@@ -18,7 +18,7 @@ class rPrimitive{
   //Width of the stroke.
   float stroke;
   
-  //PImage used to represent the object.
+  //PImage used to represent the object. (Optional)
   PImage image;
   
   //Constructor
