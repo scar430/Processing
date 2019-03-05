@@ -19,9 +19,9 @@ PImage meteorSprite;//PImage used to represent meteors.
 //Stars
 PImage stars;
 
-//Death Variables
-PGraphics deathScreen;//PGraphic that is drawn on death to indicate the game is over.
-int score = 0;
+//Score
+int startScore;
+int endScore;
 
 enum gameState{
   Menu, 
@@ -40,8 +40,6 @@ void setup() {
   menuScreen = loadImage("menuScreen.jpg");
   
   stars = loadImage("stars.gif");
-  
-  deathScreen = createGraphics(width, height);//deathScreen the PGraphic is initialized here.
   
   waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
   
@@ -107,7 +105,7 @@ void draw() {
         player.object.y = 0;//Reset the player back to where there x was before crossing the bounds.
       }
       
-      //Collision Code
+      //Collision Code / Performance Code
       //For all of the waves
       for(EntityWave wave : waves){
         //For all of the meteors in these waves
@@ -115,6 +113,9 @@ void draw() {
           //If the players x and x + width are within the bounds of the meteor...
          if(player.object.x > rb.object.x && player.object.x < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)|| (player.object.x + player.object.w) > rb.object.x && (player.object.x + player.object.w) < (rb.object.x + rb.object.w) && player.object.y > rb.object.y && player.object.y < (rb.object.y + rb.object.h)){
            state = gameState.Death;//die :(
+         }
+         
+         if(rb.object.y > (height + rb.object.h)){
          }
         }
       }
@@ -128,8 +129,6 @@ void draw() {
         EntityWave wave = new EntityWave(5);//Create a new EntityWave since the benchmark has been reached
         wave.createWave();//Create the new wave
         waves.add(wave);//Add the wave to the ArrayList, waves, in order to use it.
-        
-        print("New Wave!\n");//Debug feature to signal new wave.
       }
       
       //For every EntityWave in waves : wave.moveWave(ArrayList waves). This applies the Physics method direction(float, float) to all entites in the wave.
@@ -147,7 +146,7 @@ void draw() {
   print(state + "\n");
 }
 
-void mouseReleased(){
+void mouseClicked(){
   switch(state){
     case Menu:
     Vector vector = new Vector(mouseX, mouseY);//Make a new vector to reference in CheckBounds()
@@ -155,10 +154,8 @@ void mouseReleased(){
     if(startMenu.buttons[0].CheckBounds(vector) == true){
       setPlayer();//Reset the player
       state = gameState.Game;
+      startScore = millis();
     }
-    /*if(startMenu.buttons[1].CheckBounds(vector) == true){
-      state = gameState.Difficulty;
-    }*/
     break;
     
     case Difficulty:
@@ -170,6 +167,9 @@ void mouseReleased(){
     break;
     
     case Death:
+    endScore = millis();
+    int score = int(round(((endScore - startScore) / 1000)));//Score is the milliseconds between the start and end of game then divided by a thousand to turn milliseconds into seconds.
+    printScore(score);//Record the score and store it.
     state = gameState.Menu;
     break;
   }
@@ -179,24 +179,20 @@ void death(){
   print("COLLISION\n");//Debug, detect collisions.
       
   //Death Screen Code.
-  deathScreen.beginDraw();//Being drawing the "PGraphic deathScreen".
   background(0);//Wipe the background and color it black.
   textAlign(CENTER, CENTER);//Text in the center of the screen.
   textSize(25);//Text size is 100.
   fill(255);//The text color is white.
-  text("YOU DIED", 0, height/2 - 25, width, 50);//Display textBox with the string "YOU DIED".
-  text("Press any button to continue.", 0, height/2 + 25, width, 50);//Display textBox with the string "YOU DIED".
-  deathScreen.endDraw();//End drawing the "PGraphic deathScreen".
-  
+  text("YOU DIED", 0, height * 0.25, width, 50);//Display textBox with the string "YOU DIED".
+  text("Click to continue.", 0, height * 0.5, width, 50);//Display textBox with the string "YOU DIED".
+}
+
+void printScore(int score){
   //Record Score
-  String name = "bob";
-  String[] score = { name};
+  String printScore = "User survived " + str(score) + " seconds in the Meteor Shower at " + str(hour()) + ":" + (str(minute())) + " on " + str(month()) + "/" + str(day()) + "/" + str(year());
+  String[] scoreAssembler = { printScore};
   File[] files = listFiles("HighScores");
-  saveStrings("HighScores/" + "Score" + str(files.length) + ".txt", score);
-  
-  //Display PGraphic Code.
-  translate(0, 0, 999);//Translate the z-value to 999. (Most reliable, higher values can sometimes cause blank images).
-  image(deathScreen, 0, 0, width, height);//Draw the "PGraphic deathScreen", as an image and make it take up the whole screen
+  saveStrings("HighScores/" + "Score_" + str(files.length) + ".txt", scoreAssembler);
 }
 
 //Set the players position to default position.
