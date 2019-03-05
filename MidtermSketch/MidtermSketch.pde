@@ -17,9 +17,9 @@ int waveTime;//Integer used to benchmark time and signals waves, used in conjunc
 int waveInt = 1000;//Integer used as an interval and is added onto "waveTime" in order to refresh it.
 PImage meteorSprite;//PImage used to represent meteors.
 
-//Stars
+//Stars, I did this quickly so it's janky
 PImage star;
-PImage[] stars = new PImage[2];//Stars will be moved together
+rPrimitive[] stars = new rPrimitive[2];//Stars will be moved together
 
 //Score, the two are used to mark start time and end time.
 int startScore;
@@ -40,9 +40,13 @@ public void settings() {
 }
 
 void setup() {
-  menuScreen = loadImage("menuScreen.jpg");
+  menuScreen = loadImage("menuScreen.jpg");//menu background
   
-  star = loadImage("stars.gif");
+  //Make stars, this is janky cuz im in a hurry. I'm not even sure if this works.
+  star = loadImage("stars.gif");//game background
+  rPrimitive firstStarPrim = new rPrimitive(float(0), float(0), float(width), float(height), float(255), float(255), float(255), float(255), float(0), star);//Theres two star prims because one has to star off screen
+  rPrimitive secondStarPrim = new rPrimitive(float(0), float(0 - height), float(width), float(height), float(255), float(255), float(255), float(255), float(0), star);
+  stars = new rPrimitive[]{ firstStarPrim, secondStarPrim};
   
   waveTime = waveInt;//waveTime is initialized as equal to waveInt in order to benchmark time from 0.
   
@@ -77,9 +81,25 @@ void draw() {
     break;
     
     case Game:
-      pushMatrix();
+      //***Note*** I added the moving stars as a proof-of-concept however they make me motion sick. There is another option below this for loop, it's commented out.
+      //This moves all the stars
+      //EDIT: I slowed the rate at which they move to 1, this makes it tolerable to look at.
+      for(rPrimitive star : stars){
+        if(star.y > height){
+          star.y = (0 - height);
+          star.display();
+        }
+        else{
+          star.y += 1;
+          star.display();
+        }
+      }
+      
+      //These stars stay still. dunno why I added the push and pops in retrospect probably something to do with z values.
+      /*pushMatrix();
       image(star, 0, 0, width, height);
-      popMatrix();
+      popMatrix();*/
+      
       //If any mouse button is pressed...
       if (mousePressed) {
         /*
@@ -119,6 +139,7 @@ void draw() {
          }
          
          if(rb.object.y > (height + rb.object.h)){
+           wave.channel.clear();
          }
         }
       }
