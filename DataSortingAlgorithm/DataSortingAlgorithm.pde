@@ -1,4 +1,4 @@
-//Seth Banker, Bubble Sort
+//Seth Banker, Insertion Sort
 
 //I included this in case I labeled it wrong.
 //This sorting algorithm iterates through each element and compares the current element to the next element, if it is not in order they swap places.
@@ -12,7 +12,7 @@ void setup(){
   //**NOTE** do NOT change the width, if you need to, it must be a multiple of 255 and the scale must be equal to that multiple.
   size(765, 400);
   
-  frameRate(240);//Change the framerate to speed it up, also depends on what kinda machine your on but mine can run 120 (I recommend making it as fast as possible)
+  frameRate(1000);//Change the framerate to speed it up, also depends on what kinda machine your on but mine can run 120 (I recommend making it as fast as possible)
   
   //**POPULATE ARRAY**
   //Assigning the appropiate element to it's own slot (this is used to generate the correct elements and save them.)
@@ -20,16 +20,20 @@ void setup(){
     intsToSort[i] = i;// 1:1 match, the current iterated number is equal to that same numbered element in the array
   }
   
+  
   //**RANDOMIZE ARRAY**
   //Now Randomize these elements so we have something to sort. (This is just randomly selecting elements and swapping them)
   for(Integer i : intsToSort){
     
-    int indexPlaceHolder = intsToSort[int(random(0, intsToSort.length))];//Save the randomly selected index value because it's gonna be overwritten soon.
-    intsToSort[indexPlaceHolder] = i;//At the randomly selected index, make the value equal to the selected one
+    int randomIndex = int(random(0, intsToSort.length));//Choose a random index number to select an element and swap it
+    int valuePlaceHolder = intsToSort[randomIndex];//Save the randomly selected index value because it's gonna be overwritten soon.
+    intsToSort[randomIndex] = intsToSort[i];//At the randomly selected index, make the value equal to the selected one
     
     //This is why we needed the placeholder
-    i = indexPlaceHolder;//The current iterated element equals the randomly selected element
+    intsToSort[i] =  valuePlaceHolder;//The current iterated element equals the randomly selected element
   }
+  
+  
 }
 
 void draw(){
@@ -51,14 +55,14 @@ void sortInts(){
     
     //This first if statement doesn't work and I'm not quite sure why.
     //If the array is finished...
-    if(i == 255){
+    if(i == 254){
       
       //Finished message
       fill(255, 0, 0);
       textSize(100);
       text("Finally sweet release!", 0, 0, width, height);
+      noLoop();
     }
-    
     else
     //if the current element is less than the next element (A.K.A. is in the correct place.) and the int is not 255 (That means we reached the end of the array and if we continue then it's null exception time for you!)
     if(intsToSort[i] < intsToSort[i + 1]){
@@ -67,9 +71,7 @@ void sortInts(){
       continue;//continue because nothing significant has happened
       
     }
-    
     else
-    
     //if current element is greater than the next element (A.K.A. not in order)
     if(intsToSort[i] > intsToSort[i + 1])
     {
@@ -80,7 +82,7 @@ void sortInts(){
       print("Out of order at " + str(i + 1) + ". Starting from the beginning.\n");//print that the next element was out of order and we are now restarting the process
       
       //Had I not been using a loop this would have been a recursive function and it would have restarted right here.
-      break;//**DO NOT REMOVE** this will remove the visual component AND will cause the method to just swap wrong integers one place instead of restarting and swapping them until theyre in the right place
+      break;//**DO NOT REMOVE** this will break (as in destroy) the program.
       
     }
   }
