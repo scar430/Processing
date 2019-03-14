@@ -12,6 +12,8 @@ void setup(){
   //**NOTE** do NOT change the width, if you need to, it must be a multiple of 255 and the scale must be equal to that multiple.
   size(765, 400);
   
+  frameRate(240);//Change the framerate to speed it up, also depends on what kinda machine your on but mine can run 120 (I recommend making it as fast as possible)
+  
   //**POPULATE ARRAY**
   //Assigning the appropiate element to it's own slot (this is used to generate the correct elements and save them.)
   for(int i = 0; i < 255; i++){
@@ -47,8 +49,19 @@ void sortInts(){
   //For every int that must be sorted...
   for(int i = 0; i < intsToSort.length; i++){
     
-    //if the current element is less than the next element (A.K.A. is in the correct place.) and the int is not 255 (That means we reached the end of the array and we continue then it's null exception time for you!)
-    if(intsToSort[i] < intsToSort[i + 1] && intsToSort[i] != 255){
+    //This first if statement doesn't work and I'm not quite sure why.
+    //If the array is finished...
+    if(i == 255){
+      
+      //Finished message
+      fill(255, 0, 0);
+      textSize(100);
+      text("Finally sweet release!", 0, 0, width, height);
+    }
+    
+    else
+    //if the current element is less than the next element (A.K.A. is in the correct place.) and the int is not 255 (That means we reached the end of the array and if we continue then it's null exception time for you!)
+    if(intsToSort[i] < intsToSort[i + 1]){
       
       print("Continuing at element " + str(i) + ".\n");//Print what element were on
       continue;//continue because nothing significant has happened
@@ -64,8 +77,10 @@ void sortInts(){
       int placeHolder = intsToSort[i];//save what element were on otherwise we'll lose what value this element held.
       intsToSort[i] = intsToSort[i + 1];//The current element now equals the next element (This is why we saved it because it's being overwritten)
       intsToSort[i + 1] = placeHolder;//The next element now equals what the current element once was.
-      print("Out of order at " + str(i + 1) + ". Starting form the beginning.\n");//print that the next element was out of order and we are now restarting the process
-      break;//break, if you remove this it removes the visual component because it will just fix the whole array in one frame.
+      print("Out of order at " + str(i + 1) + ". Starting from the beginning.\n");//print that the next element was out of order and we are now restarting the process
+      
+      //Had I not been using a loop this would have been a recursive function and it would have restarted right here.
+      break;//**DO NOT REMOVE** this will remove the visual component AND will cause the method to just swap wrong integers one place instead of restarting and swapping them until theyre in the right place
       
     }
   }
