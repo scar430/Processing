@@ -1,0 +1,45 @@
+int[] intsToSort = new int[255];
+
+void setup(){
+  size(765, 255);
+  frameRate(1);//This is so you can see every bit of the seat-clenching action.
+  
+  //Assigning the appropiate element to it's own slot (this is used to generate the correct elements and save them.)
+  for(int i = 0; i < 255; i++){
+    intsToSort[i] = i;
+  }
+  
+  //Now Randomize these elements so we have something to sort. (This is just randomly selecting elements and swapping them)
+  for(Integer i : intsToSort){
+    int elementPlaceHolder = i;
+    int indexPlaceHolder = int(random(0, intsToSort.length - 1));
+    intsToSort[indexPlaceHolder] = i;
+    i = intsToSort[indexPlaceHolder];
+  }
+}
+
+void draw(){
+  sortInts();
+  for(Integer i : intsToSort){
+    noStroke();
+    fill(i);
+    rect(i * 3, 0, 3, height);
+  }
+}
+
+void sortInts(){
+  for(Integer i : intsToSort){
+    if(i < intsToSort[i++]){
+      continue;
+    }
+    else
+    if(i > intsToSort[i++])
+    {
+      int placeHolder = i;
+      i = intsToSort[i++];
+      intsToSort[i++] = placeHolder;
+      print("Out of order at " +  + ". " + "Starting form the beginning.\n");
+      break;
+    }
+  }
+}
