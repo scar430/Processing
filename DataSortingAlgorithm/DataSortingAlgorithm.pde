@@ -12,7 +12,7 @@ void setup(){
   //**NOTE** do NOT change the width, if you need to, it must be a multiple of 255 and the scale must be equal to that multiple.
   size(765, 400);
   
-  frameRate(1000);//Change the framerate to speed it up, also depends on what kinda machine your on but mine can run 120 (I recommend making it as fast as possible)
+  frameRate(1000);//I don't expect it to keep up with this and it doesn't have to, I just want it to go as fast as possible.
   
   //**POPULATE ARRAY**
   //Assigning the appropiate element to it's own slot (this is used to generate the correct elements and save them.)
@@ -53,17 +53,6 @@ void sortInts(){
   //For every int that must be sorted...
   for(int i = 0; i < intsToSort.length; i++){
     
-    //This first if statement doesn't work and I'm not quite sure why.
-    //If the array is finished...
-    if(i == 254){
-      
-      //Finished message
-      fill(255, 0, 0);
-      textSize(100);
-      text("Finally sweet release!", 0, 0, width, height);
-      noLoop();
-    }
-    else
     //if the current element is less than the next element (A.K.A. is in the correct place.) and the int is not 255 (That means we reached the end of the array and if we continue then it's null exception time for you!)
     if(intsToSort[i] < intsToSort[i + 1]){
       
